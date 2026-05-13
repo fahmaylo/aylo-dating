@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aylo — A quiet place to think</title>
+<meta name="description" content="Aylo is a gentle journaling companion. Daily reflection, kept private.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F4EFE8;
+    --bg-soft: #EFE8DE;
+    --ink: #1E2433;
+    --ink-mid: #4A5065;
+    --ink-soft: #8A8FA0;
+    --line: rgba(30,36,51,0.10);
+    --line-strong: rgba(30,36,51,0.18);
+    --card: #FFFFFF;
+    --accent: #E8586E;
+    --accent-soft: #FCE4E8;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, system-ui, "Segoe UI", sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    line-height: 1.45;
+  }
+  a { color: inherit; text-decoration: none; }
+
+  /* ── Top nav ───────────────────────────────────────── */
+  .nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 22px 32px;
+    max-width: 1240px; margin: 0 auto;
+  }
+  .brand { display: inline-flex; align-items: center; gap: 9px; font-size: 22px; letter-spacing: -0.01em; font-family: "Quicksand", system-ui, sans-serif; font-weight: 600; color: var(--ink); }
+  .brand .heart { color: var(--accent); display: inline-flex; }
+  .nav-links { display: flex; gap: 26px; font-size: 14.5px; color: var(--ink-mid); }
+  .nav-links a:hover { color: var(--ink); }
+
+  /* ── Hero ──────────────────────────────────────────── */
+  .hero {
+    max-width: 1100px; margin: 0 auto;
+    padding: 56px 32px 80px;
+    text-align: center;
+  }
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 6px 14px; border-radius: 999px;
+    background: var(--card); border: 1px solid var(--line);
+    font-size: 12.5px; color: var(--ink-mid); letter-spacing: 0.01em;
+    margin-bottom: 28px;
+  }
+  .eyebrow .dot { width: 6px; height: 6px; border-radius: 999px; background: var(--accent); }
+  h1.headline {
+    font-size: clamp(48px, 7.4vw, 96px);
+    line-height: 0.98;
+    letter-spacing: -0.035em;
+    font-weight: 500;
+    margin: 0 0 24px;
+    color: var(--ink);
+  }
+  h1.headline em {
+    font-style: italic;
+    font-family: "Iowan Old Style", "Georgia", "Times New Roman", serif;
+    font-weight: 400;
+    color: var(--accent);
+  }
+  .sub {
+    font-size: clamp(17px, 1.5vw, 21px);
+    color: var(--ink-mid);
+    max-width: 540px;
+    margin: 0 auto 36px;
+    line-height: 1.45;
+  }
+
+  /* ── App Store badge ──────────────────────────────── */
+  .store-row { display: inline-flex; align-items: center; gap: 14px; flex-wrap: wrap; justify-content: center; }
+  .store-badge {
+    display: inline-flex; align-items: center; gap: 12px;
+    background: #1E2433; color: #fff;
+    padding: 11px 22px 12px 18px;
+    border-radius: 13px;
+    transition: transform 160ms ease, box-shadow 160ms ease;
+    box-shadow: 0 1px 0 rgba(255,255,255,0.06) inset, 0 6px 24px rgba(30,36,51,0.18);
+  }
+  .store-badge:hover { transform: translateY(-1px); box-shadow: 0 1px 0 rgba(255,255,255,0.06) inset, 0 12px 32px rgba(30,36,51,0.22); }
+  .store-badge .apple { display: inline-flex; }
+  .store-badge .lines { display: flex; flex-direction: column; line-height: 1.05; text-align: left; }
+  .store-badge .small { font-size: 10.5px; opacity: 0.78; letter-spacing: 0.02em; }
+  .store-badge .big { font-size: 19px; font-weight: 500; letter-spacing: -0.01em; margin-top: 2px; }
+  .store-note { font-size: 13px; color: var(--ink-soft); }
+
+  /* ── Phone mockup ─────────────────────────────────── */
+  .phone-stage {
+    margin: 72px auto 0;
+    position: relative;
+    width: 340px; height: 690px;
+  }
+  .phone-glow {
+    position: absolute; inset: -40px -80px -10px;
+    background: radial-gradient(60% 50% at 50% 55%, rgba(232,88,110,0.10), transparent 70%);
+    z-index: 0; pointer-events: none;
+  }
+  .phone {
+    position: relative; z-index: 1;
+    width: 340px; height: 690px;
+    background: #0B0E16;
+    border-radius: 48px;
+    padding: 10px;
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,0.06) inset,
+      0 1px 0 rgba(255,255,255,0.08) inset,
+      0 30px 60px -20px rgba(30,36,51,0.45),
+      0 12px 30px -8px rgba(30,36,51,0.25);
+  }
+  .phone-screen {
+    position: relative;
+    width: 100%; height: 100%;
+    background: #F4EFE8;
+    border-radius: 38px;
+    overflow: hidden;
+  }
+  .phone-screen .notch {
+    position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
+    width: 110px; height: 30px;
+    background: #0B0E16; border-radius: 999px;
+    z-index: 5;
+  }
+  .status {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 26px 0; font-size: 14px; font-weight: 600;
+    color: var(--ink);
+  }
+  .status .right { display: inline-flex; gap: 5px; align-items: center; }
+  .screen-top {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 22px 18px 0;
+  }
+  .usage-pill {
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 5px 10px 5px 7px;
+    background: var(--accent-soft);
+    border: 1px solid rgba(232,88,110,0.18);
+    border-radius: 999px;
+    font-size: 10.5px; color: var(--accent); font-weight: 500; line-height: 1.05;
+  }
+  .usage-pill .ring {
+    width: 14px; height: 14px; border-radius: 999px;
+    border: 1.5px solid var(--accent);
+    position: relative;
+  }
+  .usage-pill .ring::after {
+    content: ''; position: absolute; inset: -1.5px;
+    border-radius: 999px;
+    background: conic-gradient(var(--accent) 96%, transparent 0);
+    -webkit-mask: radial-gradient(circle, transparent 4px, #000 5px);
+    mask: radial-gradient(circle, transparent 4px, #000 5px);
+  }
+  .brand-mark { display: inline-flex; align-items: center; gap: 6px; font-family: "Quicksand", system-ui, sans-serif; font-weight: 600; font-size: 18px; color: var(--ink); letter-spacing: -0.005em; }
+  .brand-mark .heart { color: var(--accent); }
+  .gear {
+    width: 28px; height: 28px; border-radius: 999px;
+    display: inline-flex; align-items: center; justify-content: center;
+    color: var(--ink-mid);
+  }
+  .chat-area { padding: 18px 16px 130px; display: flex; flex-direction: column; gap: 12px; text-align: left; }
+  .upload-card {
+    background: #fff; border: 1px solid var(--line); border-radius: 14px;
+    padding: 12px 12px 12px; margin-bottom: 4px;
+  }
+  .upload-card .upload-meta {
+    display: flex; align-items: center; gap: 6px;
+    color: var(--ink-mid); font-size: 11px; font-weight: 500; margin-bottom: 9px;
+  }
+  .upload-card .upload-meta svg { width: 12px; height: 12px; }
+  .bubble-row { display: flex; }
+  .bubble-row.left { justify-content: flex-start; }
+  .bubble-row.right { justify-content: flex-end; }
+  .bubble {
+    max-width: 75%; padding: 7px 11px;
+    font-size: 12.5px; line-height: 1.35; letter-spacing: -0.1px;
+    margin-bottom: 4px;
+  }
+  .bubble.them { background: #E9E4DA; color: var(--ink); border-radius: 14px 14px 14px 5px; }
+  .bubble.me   { background: #2A78F1; color: #fff;  border-radius: 14px 14px 5px 14px; }
+  .aylo-msg {
+    display: flex; align-items: flex-start; gap: 9px;
+    margin: 6px 12px 6px 4px; padding-right: 14%;
+  }
+  .aylo-msg .heart-ico { color: var(--accent); flex-shrink: 0; margin-top: 2px; }
+  .aylo-msg p { margin: 0; font-size: 13.5px; line-height: 1.45; letter-spacing: -0.1px; color: var(--ink); }
+  .me-reply {
+    align-self: flex-end; max-width: 78%;
+    background: var(--accent); color: #fff;
+    padding: 9px 13px; border-radius: 16px 16px 5px 16px;
+    font-size: 13.5px; line-height: 1.4; letter-spacing: -0.1px;
+    margin: 4px 4px 4px 0;
+  }
+  .composer {
+    position: absolute; left: 12px; right: 12px; bottom: 78px;
+    background: #fff; border: 1px solid var(--line); border-radius: 22px;
+    padding: 9px 10px 9px 14px;
+    display: flex; align-items: center; gap: 8px;
+    box-shadow: 0 4px 14px rgba(30,36,51,0.04);
+  }
+  .composer .ph { flex: 1; color: var(--ink-soft); font-size: 13.5px; display: inline-flex; align-items: center; }
+  .composer .caret {
+    display: inline-block; width: 1.5px; height: 15px;
+    background: var(--accent); margin-right: 4px;
+    vertical-align: middle;
+  }
+  .composer .plus {
+    width: 30px; height: 30px; border-radius: 999px;
+    background: var(--bg-soft); color: var(--ink-mid);
+    display: inline-flex; align-items: center; justify-content: center;
+  }
+  .composer .send {
+    width: 30px; height: 30px; border-radius: 999px;
+    background: var(--accent); color: #fff;
+    display: inline-flex; align-items: center; justify-content: center;
+  }
+  .tabbar {
+    position: absolute; left: 0; right: 0; bottom: 0;
+    display: flex; justify-content: space-around; align-items: center;
+    padding: 12px 18px 22px;
+    background: linear-gradient(to top, rgba(244,239,232,1) 60%, rgba(244,239,232,0));
+  }
+  .tab { display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 10px; color: var(--ink-soft); }
+  .tab.active { color: var(--accent); }
+  .tab svg { width: 22px; height: 22px; }
+  .home-ind {
+    position: absolute; left: 50%; bottom: 8px; transform: translateX(-50%);
+    width: 120px; height: 4px; border-radius: 999px; background: rgba(30,36,51,0.35);
+  }
+
+  /* ── Value strip ──────────────────────────────────── */
+  .values {
+    max-width: 980px; margin: 24px auto 0;
+    padding: 64px 32px 32px;
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 36px;
+  }
+  .value h3 {
+    font-size: 17px; font-weight: 600; margin: 0 0 8px;
+    letter-spacing: -0.005em;
+  }
+  .value p { font-size: 14.5px; color: var(--ink-mid); margin: 0; line-height: 1.55; }
+  .value .icon {
+    width: 32px; height: 32px; border-radius: 10px;
+    background: var(--card); border: 1px solid var(--line);
+    display: inline-flex; align-items: center; justify-content: center;
+    color: var(--accent); margin-bottom: 14px;
+  }
+
+  /* ── Footer ───────────────────────────────────────── */
+  footer {
+    max-width: 1100px; margin: 96px auto 0;
+    padding: 36px 32px 48px;
+    border-top: 1px solid var(--line);
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 18px;
+    font-size: 13.5px; color: var(--ink-soft);
+  }
+  footer .links { display: flex; gap: 22px; }
+  footer .links a:hover { color: var(--ink); }
+  footer .brand-line { display: inline-flex; align-items: center; gap: 8px; }
+  footer .brand-line .heart { color: var(--accent); }
+
+  @media (max-width: 720px) {
+    .nav { padding: 18px 22px; }
+    .nav-links { display: none; }
+    .hero { padding: 32px 22px 56px; }
+    .values { grid-template-columns: 1fr; gap: 28px; padding: 48px 22px 16px; }
+    footer { padding: 28px 22px 36px; }
+    .phone-stage { transform: scale(0.92); transform-origin: top center; margin-top: 56px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ─────────── Nav ─────────── -->
+<nav class="nav">
+  <a class="brand" href="/">
+    <span class="heart" aria-hidden="true">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+        <defs>
+          <linearGradient id="navHeart" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="currentColor" stop-opacity="1"/>
+            <stop offset="100%" stop-color="currentColor" stop-opacity="0.5"/>
+          </linearGradient>
+        </defs>
+        <path fill="url(#navHeart)" d="M12 20s-7-4.5-7-10a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 19 10c0 5.5-7 10-7 10z"/>
+      </svg>
+    </span>
+    Aylo
+  </a>
+  <div class="nav-links">
+  </div>
+</nav>
+
+<!-- ─────────── Hero ─────────── -->
+<section class="hero">
+  <h1 class="headline">Your dating life,<br>reflected <em>back.</em></h1>
+
+  <p class="sub">Aylo is half mirror, half guide. Bring in the text threads, screenshots, and the questions living rent-free in your head — then sit with what they reveal. You do the noticing. Aylo asks the questions that help you get there.</p>
+
+  <div class="store-row">
+    <a class="store-badge" href="#" aria-label="Download on the App Store">
+      <span class="apple" aria-hidden="true">
+        <svg width="26" height="32" viewBox="0 0 28 34" fill="#fff">
+          <path d="M22.4 18.1c0-3.7 3-5.4 3.1-5.5-1.7-2.5-4.4-2.8-5.3-2.9-2.3-.2-4.4 1.3-5.6 1.3-1.2 0-2.9-1.3-4.8-1.2-2.5 0-4.7 1.4-6 3.7-2.6 4.4-.7 11 1.8 14.7 1.2 1.8 2.7 3.8 4.6 3.7 1.9-.1 2.5-1.2 4.8-1.2 2.2 0 2.8 1.2 4.8 1.2 2 0 3.3-1.8 4.5-3.6 1.4-2.1 2-4.1 2-4.2-.1 0-3.9-1.5-3.9-6zM18.8 7.5c1-1.2 1.7-2.9 1.5-4.6-1.5.1-3.3 1-4.3 2.2-1 1.1-1.8 2.8-1.6 4.5 1.7.2 3.4-.9 4.4-2.1z"/>
+        </svg>
+      </span>
+      <span class="lines">
+        <span class="small">Download on the</span>
+        <span class="big">App Store</span>
+      </span>
+    </a>
+
+  </div>
+
+  <!-- ─────────── Phone ─────────── -->
+  <div class="phone-stage" aria-hidden="true">
+    <div class="phone-glow"></div>
+    <div class="phone">
+      <div class="phone-screen">
+        <div class="notch"></div>
+        <div class="status">
+          <span>9:41</span>
+          <span class="right">
+            <svg width="18" height="11" viewBox="0 0 18 11" fill="currentColor"><rect x="0" y="6" width="3" height="5" rx="0.6"/><rect x="5" y="4" width="3" height="7" rx="0.6"/><rect x="10" y="2" width="3" height="9" rx="0.6"/><rect x="15" y="0" width="3" height="11" rx="0.6"/></svg>
+            <svg width="15" height="11" viewBox="0 0 15 11" fill="currentColor"><path d="M7.5 1.3a9 9 0 0 1 6.2 2.4l-.9 1A7.7 7.7 0 0 0 7.5 2.6 7.7 7.7 0 0 0 2.2 4.7l-.9-1a9 9 0 0 1 6.2-2.4zm0 3.1a6 6 0 0 1 4.1 1.6l-.9 1a4.7 4.7 0 0 0-3.2-1.3 4.7 4.7 0 0 0-3.2 1.3l-.9-1a6 6 0 0 1 4.1-1.6zm0 3.1a3 3 0 0 1 2 .8l-2 2.2-2-2.2a3 3 0 0 1 2-.8z"/></svg>
+            <svg width="24" height="11" viewBox="0 0 24 11" fill="none" stroke="currentColor" stroke-width="1"><rect x="0.5" y="0.5" width="20" height="10" rx="2.5"/><rect x="2" y="2" width="17" height="7" rx="1.5" fill="currentColor"/><path d="M22 4v3" stroke-linecap="round"/></svg>
+          </span>
+        </div>
+        <div class="screen-top">
+          <span class="usage-pill">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>
+            Chats
+          </span>
+          <span class="brand-mark">
+            <span class="heart" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                <defs>
+                  <linearGradient id="phoneHeart" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="currentColor" stop-opacity="1"/>
+                    <stop offset="100%" stop-color="currentColor" stop-opacity="0.5"/>
+                  </linearGradient>
+                </defs>
+                <path fill="url(#phoneHeart)" d="M12 20s-7-4.5-7-10a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 19 10c0 5.5-7 10-7 10z"/>
+              </svg>
+            </span>
+            Aylo
+          </span>
+          <span style="width: 28px; height: 28px;"></span>
+        </div>
+        <div class="chat-area">
+          <div class="upload-card">
+            <div class="upload-meta">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 1 1 3.5 6.6L4 20l1.4-3.6A7.96 7.96 0 0 1 4 12z"/></svg>
+              From Marcus
+            </div>
+            <div class="bubble-row left"><div class="bubble them">Hey! How was your weekend?</div></div>
+            <div class="bubble-row right"><div class="bubble me">It was great! Went hiking 🥾</div></div>
+            <div class="bubble-row left"><div class="bubble them">Nice, we should go sometime</div></div>
+          </div>
+          <div class="aylo-msg">
+            <span class="heart-ico" aria-hidden="true">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+                <defs><linearGradient id="phoneHeartMsg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="currentColor" stop-opacity="1"/><stop offset="100%" stop-color="currentColor" stop-opacity="0.5"/></linearGradient></defs>
+                <path fill="url(#phoneHeartMsg)" d="M12 20s-7-4.5-7-10a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 19 10c0 5.5-7 10-7 10z"/>
+              </svg>
+            </span>
+            <p>He&rsquo;s engaging — asking about your weekend, suggesting plans. That&rsquo;s real interest. But &ldquo;we should go sometime&rdquo; without a date is the soft kind. Worth noticing if this becomes a pattern.</p>
+          </div>
+          <div class="me-reply">So what do I do, just wait?</div>
+          <div class="aylo-msg">
+            <span class="heart-ico" aria-hidden="true">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><use href="#phoneHeartMsg"/><path fill="url(#phoneHeartMsg)" d="M12 20s-7-4.5-7-10a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 19 10c0 5.5-7 10-7 10z"/></svg>
+            </span>
+            <p>What does your gut say about him so far?</p>
+          </div>
+        </div>
+        <div class="composer">
+          <span class="plus"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+          <span class="ph"><span class="caret"></span>Chat with Aylo</span>
+          <span class="send"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="m6 11 6-6 6 6"/></svg></span>
+        </div>
+        <div class="tabbar">
+          <div class="tab active">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 11 12 4l8.5 7"/><path d="M5.5 10v9a1 1 0 0 0 1 1h4v-6h3v6h4a1 1 0 0 0 1-1v-9"/></svg>
+            HQ
+          </div>
+          <div class="tab">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 1 1 3.5 6.6L4 20l1.4-3.6A7.96 7.96 0 0 1 4 12z"/></svg>
+            Chats
+          </div>
+          <div class="tab">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.2 6.3L20.5 10.5l-5.9 2.3L12 19.5l-2.6-6.7L3.5 10.5l6.3-2.2z"/></svg>
+            Reflections
+          </div>
+          <div class="tab">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="2.8"/><path d="M3 19c.5-3 3-4.3 6-4.3s5.5 1.3 6 4.3"/><circle cx="17" cy="8" r="2.1"/><path d="M15 14c3 0 6 1.1 6 4"/></svg>
+            People
+          </div>
+        </div>
+        <div class="home-ind"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────── Value strip ─────────── -->
+<section class="values">
+  <div class="value">
+    <span class="icon">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2l2.2 6.3L20.5 10.5l-5.9 2.3L12 19.5l-2.6-6.7L3.5 10.5l6.3-2.2z"/></svg>
+    </span>
+    <h3>A space for reflection.</h3>
+    <p>Reflections is where you turn inward. Write what you&rsquo;re feeling, what you noticed today, what you&rsquo;re trying to understand. Aylo holds the space; you do the looking.</p>
+  </div>
+  <div class="value">
+    <span class="icon">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v16"/><circle cx="12" cy="7" r="2" fill="currentColor"/><circle cx="12" cy="13" r="2" fill="currentColor"/><circle cx="12" cy="19" r="2" fill="currentColor"/></svg>
+    </span>
+    <h3>A timeline for one person.</h3>
+    <p>Every text, screenshot, and moment with someone you&rsquo;re seeing, laid out in order. The shape of the thing — the openings, the silences, the turns — becomes hard to miss.</p>
+  </div>
+  <div class="value">
+    <span class="icon">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="2.2"/><circle cx="18" cy="6" r="2.2"/><circle cx="6" cy="18" r="2.2"/><circle cx="18" cy="18" r="2.2"/><circle cx="12" cy="12" r="2.2" fill="currentColor"/><path d="M7.5 7.5l3 3M16.5 7.5l-3 3M7.5 16.5l3-3M16.5 16.5l-3-3"/></svg>
+    </span>
+    <h3>Patterns across everyone.</h3>
+    <p>Zoom out from one person to all of them. The same hesitation, the same pull, the same kind of person you keep choosing — the longer you use Aylo, the clearer the throughline gets.</p>
+  </div>
+</section>
+
+<!-- ─────────── Footer ─────────── -->
+<footer>
+  <span class="brand-line">
+    <span class="heart" aria-hidden="true">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+        <defs>
+          <linearGradient id="footHeart" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="currentColor" stop-opacity="1"/>
+            <stop offset="100%" stop-color="currentColor" stop-opacity="0.5"/>
+          </linearGradient>
+        </defs>
+        <path fill="url(#footHeart)" d="M12 20s-7-4.5-7-10a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 19 10c0 5.5-7 10-7 10z"/>
+      </svg>
+    </span>
+    © 2026 Aylo AI Inc.
+  </span>
+  <div class="links">
+    <a href="privacy.html">Privacy</a>
+    <a href="terms.html">Terms</a>
+    <a href="mailto:hello@ayloai.com">Contact</a>
+  </div>
+</footer>
+
+</body>
+</html>
