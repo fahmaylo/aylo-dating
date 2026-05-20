@@ -81,22 +81,39 @@
     line-height: 1.45;
   }
 
-  /* ── App Store badge ──────────────────────────────── */
-  .store-row { display: inline-flex; align-items: center; gap: 14px; flex-wrap: wrap; justify-content: center; }
-  .store-badge {
-    display: inline-flex; align-items: center; gap: 12px;
-    background: #1E2433; color: #fff;
-    padding: 11px 22px 12px 18px;
-    border-radius: 13px;
-    transition: transform 160ms ease, box-shadow 160ms ease;
-    box-shadow: 0 1px 0 rgba(255,255,255,0.06) inset, 0 6px 24px rgba(30,36,51,0.18);
+  /* ── Waitlist ────────────────────────────────────── */
+  .waitlist { text-align: center; }
+  .waitlist-label {
+    font-size: 15px; color: var(--ink-mid); margin-bottom: 14px;
+    letter-spacing: -0.01em;
   }
-  .store-badge:hover { transform: translateY(-1px); box-shadow: 0 1px 0 rgba(255,255,255,0.06) inset, 0 12px 32px rgba(30,36,51,0.22); }
-  .store-badge .apple { display: inline-flex; }
-  .store-badge .lines { display: flex; flex-direction: column; line-height: 1.05; text-align: left; }
-  .store-badge .small { font-size: 10.5px; opacity: 0.78; letter-spacing: 0.02em; }
-  .store-badge .big { font-size: 19px; font-weight: 500; letter-spacing: -0.01em; margin-top: 2px; }
-  .store-note { font-size: 13px; color: var(--ink-soft); }
+  .waitlist-form {
+    display: inline-flex; align-items: center; gap: 0;
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: 14px; overflow: hidden;
+    box-shadow: 0 4px 18px rgba(30,36,51,0.06);
+    max-width: 420px; width: 100%;
+  }
+  .waitlist-form input {
+    flex: 1; border: none; outline: none; background: transparent;
+    padding: 14px 18px; font-size: 15px; color: var(--ink);
+    font-family: inherit; min-width: 0;
+  }
+  .waitlist-form input::placeholder { color: var(--ink-soft); }
+  .waitlist-form button {
+    background: var(--accent); color: #fff; border: none;
+    padding: 14px 22px; font-size: 15px; font-weight: 600;
+    font-family: inherit; cursor: pointer;
+    letter-spacing: -0.01em;
+    transition: background 160ms ease;
+    white-space: nowrap;
+  }
+  .waitlist-form button:hover { background: #d44d60; }
+  .waitlist-success {
+    display: none; font-size: 15px; color: var(--accent);
+    font-weight: 500; margin-top: 8px;
+  }
+  .waitlist-note { font-size: 13px; color: var(--ink-soft); margin-top: 10px; }
 
   /* ── Phone mockup ─────────────────────────────────── */
   .phone-stage {
@@ -312,19 +329,14 @@
 
   <p class="sub">Aylo is half mirror, half guide. Bring in the text threads, screenshots, and the questions living rent-free in your head — then sit with what they reveal. You do the noticing. Aylo asks the questions that help you get there.</p>
 
-  <div class="store-row">
-    <a class="store-badge" href="#" aria-label="Download on the App Store">
-      <span class="apple" aria-hidden="true">
-        <svg width="26" height="32" viewBox="0 0 28 34" fill="#fff">
-          <path d="M22.4 18.1c0-3.7 3-5.4 3.1-5.5-1.7-2.5-4.4-2.8-5.3-2.9-2.3-.2-4.4 1.3-5.6 1.3-1.2 0-2.9-1.3-4.8-1.2-2.5 0-4.7 1.4-6 3.7-2.6 4.4-.7 11 1.8 14.7 1.2 1.8 2.7 3.8 4.6 3.7 1.9-.1 2.5-1.2 4.8-1.2 2.2 0 2.8 1.2 4.8 1.2 2 0 3.3-1.8 4.5-3.6 1.4-2.1 2-4.1 2-4.2-.1 0-3.9-1.5-3.9-6zM18.8 7.5c1-1.2 1.7-2.9 1.5-4.6-1.5.1-3.3 1-4.3 2.2-1 1.1-1.8 2.8-1.6 4.5 1.7.2 3.4-.9 4.4-2.1z"/>
-        </svg>
-      </span>
-      <span class="lines">
-        <span class="small">Download on the</span>
-        <span class="big">App Store</span>
-      </span>
-    </a>
-
+  <div class="waitlist">
+    <p class="waitlist-label">Available soon on iOS</p>
+    <form class="waitlist-form" onsubmit="handleWaitlist(event)">
+      <input type="email" placeholder="Your email" required>
+      <button type="submit">Notify me</button>
+    </form>
+    <p class="waitlist-success" id="waitlistSuccess">You're on the list. We'll be in touch.</p>
+    <p class="waitlist-note">No spam — just one email when we launch.</p>
   </div>
 
   <!-- ─────────── Phone ─────────── -->
@@ -466,5 +478,18 @@
   </div>
 </footer>
 
+<script>
+function handleWaitlist(e) {
+  e.preventDefault();
+  const form = e.target;
+  const email = form.querySelector('input').value;
+  // For now, just show success — hook up to a real backend later
+  form.style.display = 'none';
+  document.getElementById('waitlistSuccess').style.display = 'block';
+  document.querySelector('.waitlist-note').style.display = 'none';
+  // Log to console so you can see submissions during testing
+  console.log('Waitlist signup:', email);
+}
+</script>
 </body>
 </html>
