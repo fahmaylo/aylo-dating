@@ -479,16 +479,38 @@
 </footer>
 
 <script>
-function handleWaitlist(e) {
+async function handleWaitlist(e) {
   e.preventDefault();
   const form = e.target;
+  const btn = form.querySelector('button');
   const email = form.querySelector('input').value;
-  // For now, just show success — hook up to a real backend later
-  form.style.display = 'none';
-  document.getElementById('waitlistSuccess').style.display = 'block';
-  document.querySelector('.waitlist-note').style.display = 'none';
-  // Log to console so you can see submissions during testing
-  console.log('Waitlist signup:', email);
+
+  btn.textContent = '...';
+  btn.disabled = true;
+
+  try {
+    const res = await fetch('https://bvddesbtjgidskpdylht.supabase.co/rest/v1/waitlist', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ2ZGRlc2J0amdpZHNrcGR5bGh0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc1OTg1MTUsImV4cCI6MjA5MzE3NDUxNX0.-eKecTb3aWhmVv8kJH4Nr8Tq4zSL19-0YB0ihz6wX5g',
+        'Prefer': 'return=minimal',
+      },
+      body: JSON.stringify({ email }),
+    });
+
+    if (res.ok || res.status === 409) {
+      form.style.display = 'none';
+      document.getElementById('waitlistSuccess').style.display = 'block';
+      document.querySelector('.waitlist-note').style.display = 'none';
+    } else {
+      btn.textContent = 'Notify me';
+      btn.disabled = false;
+    }
+  } catch {
+    btn.textContent = 'Notify me';
+    btn.disabled = false;
+  }
 }
 </script>
 </body>
