@@ -81,39 +81,13 @@
     line-height: 1.45;
   }
 
-  /* ── Waitlist ────────────────────────────────────── */
-  .waitlist { text-align: center; }
-  .waitlist-label {
-    font-size: 15px; color: var(--ink-mid); margin-bottom: 14px;
-    letter-spacing: -0.01em;
+  /* ── Download ────────────────────────────────────── */
+  .download { text-align: center; }
+  .app-store-btn {
+    display: inline-block;
+    transition: opacity 160ms ease;
   }
-  .waitlist-form {
-    display: inline-flex; align-items: center; gap: 0;
-    background: var(--card); border: 1px solid var(--line);
-    border-radius: 14px; overflow: hidden;
-    box-shadow: 0 4px 18px rgba(30,36,51,0.06);
-    max-width: 420px; width: 100%;
-  }
-  .waitlist-form input {
-    flex: 1; border: none; outline: none; background: transparent;
-    padding: 14px 18px; font-size: 15px; color: var(--ink);
-    font-family: inherit; min-width: 0;
-  }
-  .waitlist-form input::placeholder { color: var(--ink-soft); }
-  .waitlist-form button {
-    background: var(--accent); color: #fff; border: none;
-    padding: 14px 22px; font-size: 15px; font-weight: 600;
-    font-family: inherit; cursor: pointer;
-    letter-spacing: -0.01em;
-    transition: background 160ms ease;
-    white-space: nowrap;
-  }
-  .waitlist-form button:hover { background: #d44d60; }
-  .waitlist-success {
-    display: none; font-size: 15px; color: var(--accent);
-    font-weight: 500; margin-top: 8px;
-  }
-  .waitlist-note { font-size: 13px; color: var(--ink-soft); margin-top: 10px; }
+  .app-store-btn:hover { opacity: 0.8; }
 
   /* ── Phone mockup ─────────────────────────────────── */
   .phone-stage {
@@ -329,14 +303,10 @@
 
   <p class="sub">Aylo is half mirror, half guide. Bring in the text threads, screenshots, and the questions living rent-free in your head — then sit with what they reveal. You do the noticing. Aylo asks the questions that help you get there.</p>
 
-  <div class="waitlist">
-    <p class="waitlist-label">Available soon on iOS</p>
-    <form class="waitlist-form" onsubmit="handleWaitlist(event)">
-      <input type="email" placeholder="Your email" required>
-      <button type="submit">Notify me</button>
-    </form>
-    <p class="waitlist-success" id="waitlistSuccess">You're on the list. We'll be in touch.</p>
-    <p class="waitlist-note">No spam — just one email when we launch.</p>
+  <div class="download">
+    <a href="https://apps.apple.com/us/app/aylo-dating/id6778635795" class="app-store-btn" target="_blank" rel="noopener">
+      <img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83" alt="Download on the App Store" height="54">
+    </a>
   </div>
 
   <!-- ─────────── Phone ─────────── -->
@@ -478,40 +448,5 @@
   </div>
 </footer>
 
-<script>
-async function handleWaitlist(e) {
-  e.preventDefault();
-  const form = e.target;
-  const btn = form.querySelector('button');
-  const email = form.querySelector('input').value;
-
-  btn.textContent = '...';
-  btn.disabled = true;
-
-  try {
-    const res = await fetch('https://bvddesbtjgidskpdylht.supabase.co/rest/v1/waitlist', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ2ZGRlc2J0amdpZHNrcGR5bGh0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc1OTg1MTUsImV4cCI6MjA5MzE3NDUxNX0.-eKecTb3aWhmVv8kJH4Nr8Tq4zSL19-0YB0ihz6wX5g',
-        'Prefer': 'return=minimal',
-      },
-      body: JSON.stringify({ email }),
-    });
-
-    if (res.ok || res.status === 409) {
-      form.style.display = 'none';
-      document.getElementById('waitlistSuccess').style.display = 'block';
-      document.querySelector('.waitlist-note').style.display = 'none';
-    } else {
-      btn.textContent = 'Notify me';
-      btn.disabled = false;
-    }
-  } catch {
-    btn.textContent = 'Notify me';
-    btn.disabled = false;
-  }
-}
-</script>
 </body>
 </html>
